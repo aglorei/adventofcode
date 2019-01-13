@@ -56,4 +56,4 @@ Here are other examples:
 
 What is the first frequency your device reaches twice?
 
-Your puzzle answer was 78724.<Paste>
+Your puzzle answer was 78724.
