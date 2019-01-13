@@ -15,6 +15,7 @@ def part2(frequencies, start=0):
         if start in seen:
             return start
         seen.add(start)
+    return None
 
 def main():
     print(part1(lines()))
