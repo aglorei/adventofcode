@@ -1,5 +1,9 @@
-install:
-	pipenv sync
+PYLINT = pipenv run pylint
+PYLINTFLAGS = -rn --rcfile .pylintrc
 
-lint:
-	pipenv run pylint --rcfile .pylintrc 2018
+SOURCES := $(wildcard 2018/**/*.py)
+
+pylint: $(patsubst %.py,%.pylint,$(SOURCES))
+
+%.pylint:
+	$(PYLINT) $(PYLINTFLAGS) $*.py
