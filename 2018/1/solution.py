@@ -3,7 +3,7 @@ import itertools
 
 def lines():
     for line in fileinput.input():
-        yield line
+        yield line.strip()
 
 def part1():
     return sum(map(int, lines()))
