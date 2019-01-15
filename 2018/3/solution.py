@@ -1,20 +1,19 @@
-from collections import Counter
+from collections import defaultdict
 import fileinput
+import re
 
 def lines():
     for line in fileinput.input():
         yield line.strip()
 
 def part1():
-    claimed = []
+    claims = defaultdict(set)
     for line in lines():
-        edge, dimensions = line.split()[2:]
-        edge = tuple(map(int, edge[:-1].split(',')))
-        dimensions = tuple(map(int, dimensions.split('x')))
-        for x_coordinate in range(dimensions[0]):
-            for y_coordinate in range(dimensions[1]):
-                claimed.append(tuple([sum(n) for n in zip(edge, [x_coordinate, y_coordinate])]))
-    return len([coordinate for coordinate, count in Counter(claimed).items() if count > 1])
+        claim, x, y, w, h = map(int, re.findall(r'\d+', line))
+        for i in range(x, x + w):
+            for j in range(y, y + h):
+                claims[(i, j)].add(claim)
+    return sum(len(value) > 1 for value in claims.values())
 
 
 def main():
