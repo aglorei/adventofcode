@@ -20,7 +20,7 @@ def part1():
 
 def part2():
     values = claims_dict().values()
-    singles = set.union(*[value for value in values if len(value) is 1])
+    singles = set.union(*[value for value in values if len(value) == 1])
     overlaps = set.union(*[value for value in values if len(value) > 1])
     return (singles - overlaps).pop()
 
