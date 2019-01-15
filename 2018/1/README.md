@@ -1,6 +1,6 @@
-# Day 1
+# Day 1: Chronal Calibration
 
-## Part One
+## Part 1
 
 "We've detected some temporal anomalies," one of Santa's Elves at the Temporal Anomaly Research and Detection Instrument Station tells you. She sounded pretty worried when she called you down here. "At 500-year intervals into the past, someone has been changing Santa's history!"
 
@@ -31,7 +31,7 @@ Starting with a frequency of zero, what is the resulting frequency after all of 
 
 Your puzzle answer was 553.
 
-## Part Two
+## Part 2
 
 You notice that the device repeats the same frequency change list over and over. To calibrate the device, you need to find the first frequency it reaches twice.
 

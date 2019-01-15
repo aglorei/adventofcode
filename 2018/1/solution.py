@@ -5,12 +5,13 @@ def lines():
     for line in fileinput.input():
         yield line
 
-def part1(frequencies, start=0):
-    return start + sum(map(int, frequencies))
+def part1():
+    return sum(map(int, lines()))
 
-def part2(frequencies, start=0):
+def part2():
+    start = 0
     seen = {start}
-    for i in itertools.cycle(frequencies):
+    for i in itertools.cycle(lines()):
         start += int(i)
         if start in seen:
             return start
@@ -18,8 +19,8 @@ def part2(frequencies, start=0):
     return None
 
 def main():
-    print(part1(lines()))
-    print(part2(lines()))
+    print(part1())
+    print(part2())
 
 if __name__ == '__main__':
     main()
