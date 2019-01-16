@@ -33,8 +33,25 @@ def part1():
     minute = max(minutes[best], key=minutes[best].get)
     return best * minute
 
+def part2():
+    minutes = defaultdict(lambda: defaultdict(int))
+    for line in lines():
+        if 'Guard' in line:
+            guard = parse_guard(line)
+        elif 'falls asleep' in line:
+            start = parse_minute(line)
+        elif 'wakes up' in line:
+            for minute in range(start, parse_minute(line)):
+                minutes[guard][minute] += 1
+    max_counts = {k: v[max(v, key=v.get)] for k, v in minutes.items()}
+    max_minutes = {k: max(v, key=v.get) for k, v in minutes.items()}
+    best = max(max_counts, key=max_counts.get)
+    minute = max_minutes[best]
+    return best * minute
+
 def main():
     print(part1())
+    print(part2())
 
 if __name__ == '__main__':
     main()
