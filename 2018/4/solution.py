@@ -4,7 +4,7 @@ import fileinput
 import re
 
 def lines():
-    for line in sorted(fileinput.input(), key=prase_timestamp):
+    for line in sorted(fileinput.input(), key=parse_timestamp):
         yield line.strip()
 
 def parse_guard(line):
@@ -13,7 +13,7 @@ def parse_guard(line):
 def parse_minute(line):
     return int(line[15:17])
 
-def prase_timestamp(line):
+def parse_timestamp(line):
     pattern = '%Y-%m-%d %H:%M'
     return datetime.strptime(line[1:17], pattern)
 
