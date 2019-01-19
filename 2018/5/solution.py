@@ -28,11 +28,7 @@ def part1():
 def part2():
     polymer = line()
     units = set(polymer.upper())
-    lowest = len(polymer)
-    for char in units:
-        ignore = char+char.swapcase()
-        lowest = min(lowest, len(react(polymer, ignore)))
-    return lowest
+    return min(len(react(polymer, char+char.swapcase())) for char in units)
 
 def main():
     print(part1())
