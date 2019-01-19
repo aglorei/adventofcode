@@ -1,23 +1,26 @@
 import fileinput
 
 def line():
-    return [line.strip() for line in fileinput.input()][0]
+    return next(fileinput.input()).strip()
+
+def react(polymer):
+    result = ['']
+    for char in polymer:
+        if char.swapcase() == result[-1]:
+            result.pop()
+        else:
+            result += char
+    return ''.join(result)
 
 def part1():
-    polymer = list(line())
+    polymer = line()
     done = False
     while not done:
-        reactives = []
-        for i in range(len(polymer)-1):
-            if i in reactives:
-                continue
-            if polymer[i].swapcase() == polymer[i+1]:
-                reactives += [i, i+1]
-        if reactives:
-            for i in reactives[::-1]:
-                polymer.pop(i)
-        else:
+        reacted = react(polymer)
+        if polymer == reacted:
             done = True
+        else:
+            polymer = reacted
     return len(polymer)
 
 def main():
