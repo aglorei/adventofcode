@@ -8,26 +8,26 @@ class ChronalCoordinates:
         self.x_max = max(x for x, y in self.points)
         self.y_min = min(y for x, y in self.points)
         self.y_max = max(y for x, y in self.points)
-        self.grid = {}
+        self.distance_maps = {}
         self.perimeter = set()
         for c in self.coordinates():
-            self.grid[c] = self.sorted_distances(c)
+            self.distance_maps[c] = self.sorted_distances(c)
             if c[0] == self.x_min or c[0] == self.x_max or c[1] == self.y_min or c[1] == self.y_max:
-                self.perimeter.add(self.grid[c][0][1])
+                self.perimeter.add(self.distance_maps[c][0][1])
 
     def part1(self):
         counts = defaultdict(int)
-        for distance_map in self.grid.values():
-            if distance_map[0][0] != distance_map[1][0]:
-                counts[distance_map[0][1]] += 1
+        for dmap in self.distance_maps.values():
+            if dmap[0][0] != dmap[1][0]:
+                counts[dmap[0][1]] += 1
         for c in self.perimeter:
             counts.pop(c)
         return max(counts.values())
 
     def part2(self, threshold=10000):
         count = 0
-        for distance_map in self.grid.values():
-            if sum(d for d, c in distance_map) < threshold:
+        for dmap in self.distance_maps.values():
+            if sum(d for d, c in dmap) < threshold:
                 count += 1
         return count
 
