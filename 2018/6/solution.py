@@ -1,51 +1,57 @@
 from collections import defaultdict
 import fileinput
 
-def lines():
-    return list(map(parse_coordinate, fileinput.input()))
+class ChronalCoordinates:
+    def __init__(self):
+        self.points = list(map(self.parse_coordinate, fileinput.input()))
+        self.x_min = min(x for x, y in self.points)
+        self.x_max = max(x for x, y in self.points)
+        self.y_min = min(y for x, y in self.points)
+        self.y_max = max(y for x, y in self.points)
+        self.grid = {}
+        self.perimeter = set()
+        for c in self.coordinates():
+            self.grid[c] = self.sorted_distances(c)
+            if c[0] == self.x_min or c[0] == self.x_max or c[1] == self.y_min or c[1] == self.y_max:
+                self.perimeter.add(self.grid[c][0][1])
 
-def parse_coordinate(line):
-    return tuple(map(int, line.strip().split(', ')))
+    def part1(self):
+        counts = defaultdict(int)
+        for distance_map in self.grid.values():
+            if distance_map[0][0] != distance_map[1][0]:
+                counts[distance_map[0][1]] += 1
+        for c in self.perimeter:
+            counts.pop(c)
+        return max(counts.values())
 
-def distance(a, b):
-    return sum(abs(x-y) for x, y in zip(a, b))
-
-def sorted_distances(origin, coordinates):
-    enum = enumerate(coordinates)
-    return sorted((distance(origin, (cx, cy)), (cx, cy)) for i, (cx, cy) in enum)
-
-def part1():
-    coordinates = lines()
-    counts = defaultdict(int)
-    perimeter = set()
-    x_min, x_max = min(x for x, y in coordinates), max(x for x, y in coordinates)
-    y_min, y_max = min(y for x, y in coordinates), max(y for x, y in coordinates)
-    for x in range(x_min, x_max+1):
-        for y in range(y_min, y_max+1):
-            distances = sorted_distances((x, y), coordinates)
-            if distances[0][0] != distances[1][0]:
-                counts[distances[0][1]] += 1
-                if x == x_min or x == x_max or y == y_min or y == y_max:
-                    perimeter.add(distances[0][1])
-    for coordinate in perimeter:
-        counts.pop(coordinate)
-    return max(counts.values())
-
-def part2(threshold=10000):
-    coordinates = lines()
-    count = 0
-    x_min, x_max = min(x for x, y in coordinates), max(x for x, y in coordinates)
-    y_min, y_max = min(y for x, y in coordinates), max(y for x, y in coordinates)
-    for x in range(x_min, x_max+1):
-        for y in range(y_min, y_max+1):
-            distances = sorted_distances((x, y), coordinates)
-            if sum(d for d, c in distances) < threshold:
+    def part2(self, threshold=10000):
+        count = 0
+        for distance_map in self.grid.values():
+            if sum(d for d, c in distance_map) < threshold:
                 count += 1
-    return count
+        return count
+
+    def coordinates(self):
+        for x in range(self.x_min, self.x_max+1):
+            for y in range(self.y_min, self.y_max+1):
+                yield (x, y)
+
+    def sorted_distances(self, origin):
+        enum = enumerate(self.points)
+        return sorted((self.distance(origin, (cx, cy)), (cx, cy)) for i, (cx, cy) in enum)
+
+    @staticmethod
+    def parse_coordinate(line):
+        return tuple(map(int, line.strip().split(', ')))
+
+    @staticmethod
+    def distance(a, b):
+        return sum(abs(x-y) for x, y in zip(a, b))
 
 def main():
-    print(part1())
-    print(part2())
+    chronal_coordinates = ChronalCoordinates()
+    print(chronal_coordinates.part1())
+    print(chronal_coordinates.part2())
 
 if __name__ == '__main__':
     main()
