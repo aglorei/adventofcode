@@ -8,12 +8,7 @@ class ChronalCoordinates:
         self.x_max = max(x for x, y in self.points)
         self.y_min = min(y for x, y in self.points)
         self.y_max = max(y for x, y in self.points)
-        self.distance_maps = {}
-        self.perimeter = set()
-        for c in self.coordinates():
-            self.distance_maps[c] = self.sorted_distances(c)
-            if c[0] == self.x_min or c[0] == self.x_max or c[1] == self.y_min or c[1] == self.y_max:
-                self.perimeter.add(self.distance_maps[c][0][1])
+        self.distance_maps = {c: self.sorted_distances(c) for c in self.coordinates()}
 
     def part1(self):
         counts = defaultdict(int)
@@ -36,9 +31,19 @@ class ChronalCoordinates:
             for y in range(self.y_min, self.y_max+1):
                 yield (x, y)
 
-    def sorted_distances(self, origin):
+    def is_perimeter(self, coordinate):
+        return (coordinate[0] == self.x_min
+                or coordinate[0] == self.x_max
+                or coordinate[1] == self.y_min
+                or coordinate[1] == self.y_max)
+
+    def sorted_distances(self, coordinate):
         enum = enumerate(self.points)
-        return sorted((self.distance(origin, (cx, cy)), (cx, cy)) for i, (cx, cy) in enum)
+        return sorted((self.distance(coordinate, (cx, cy)), (cx, cy)) for i, (cx, cy) in enum)
+
+    @property
+    def perimeter(self):
+        return set(self.distance_maps[c][0][1] for c in self.distance_maps if self.is_perimeter(c))
 
     @staticmethod
     def parse_coordinate(line):
